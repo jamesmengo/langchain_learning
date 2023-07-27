@@ -3,6 +3,10 @@ from langchain.chat_models import ChatOpenAI
 from langchain.chains import LLMChain
 
 import os
+import requests
+import pdb
+
+from linkedin import scrape_linkedin_profile
 
 information = """
   name: John Doe
@@ -17,7 +21,7 @@ if __name__ == "__main__":
 
     summary_template = """
       given the information {information} about a person I want you to create:
-      1. a short summary of the person
+      1. a short summary of the person with their name
       2. two interesting facts about the person
       3. a short description of the person's personality
       """
@@ -28,4 +32,6 @@ if __name__ == "__main__":
     llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo")
     chain = LLMChain(llm=llm, prompt=summary_prompt_template)
 
-    print(chain.run(information=information))
+    linkedin_data = scrape_linkedin_profile("https://www.linkedin.com/in/james-meng/")
+
+    print(chain.run(information=linkedin_data))
