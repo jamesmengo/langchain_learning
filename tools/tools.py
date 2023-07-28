@@ -26,9 +26,17 @@ class CustomSerpAPIWrapper(SerpAPIWrapper):
             toret = res["sports_results"]["game_spotlight"]
         elif (
             "knowledge_graph" in res.keys()
-            and "description" in res["knowledge_graph"].keys()
+            and "profiles" in res["knowledge_graph"].keys()
+            and res["knowledge_graph"]["profiles"]
+            and any(
+                item["name"] == "Twitter" for item in res["knowledge_graph"]["profiles"]
+            )
         ):
-            toret = res["knowledge_graph"]["description"]
+            profiles = res["knowledge_graph"]["profiles"]
+            twitter_profile_data = [
+                item for item in profiles if item["name"] == "Twitter"
+            ]
+            toret = twitter_profile_data[0]["link"]
         elif "snippet" in res["organic_results"][0].keys():
             toret = res["organic_results"][0]["link"]
 
@@ -38,7 +46,7 @@ class CustomSerpAPIWrapper(SerpAPIWrapper):
 
 
 def get_profile_url(name: str):
-    """Searches for Linkedin or twitter Profile Page."""
+    """Searches for Linkedin or Twitter Profile Page."""
     search = CustomSerpAPIWrapper()
     res = search.run(f"{name}")
     return res
