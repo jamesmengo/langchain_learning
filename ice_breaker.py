@@ -44,7 +44,7 @@ def ice_break(name):
     print(result)
     print(person_intel_parser.parse(result))
 
-    return person_intel_parser.parse(result)
+    return person_intel_parser.parse(result), linkedin_data.get("profile_pic_url")
 
 
 if __name__ == "__main__":
